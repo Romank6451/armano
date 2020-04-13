@@ -1,6 +1,8 @@
-import 'package:armano/Services/service.dart';
+
+import 'package:armano/screens/Services/service.dart';
 import 'package:armano/utills/MyColors.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  String _email,_password;
 
 
   @override
@@ -83,8 +86,13 @@ class _LoginState extends State<Login> {
                                                ),
                                                labelText: "Email Adress",
                                                hintText: "XXXX@gmail.com"
+                                               
 
-                                           )
+                                           ),
+                                           onChanged: (value){
+                                             this.setState((){_email=value;});
+                                             
+                                           },
                                        ),
                                        SizedBox(height: 20),
                                        TextField(
@@ -95,10 +103,16 @@ class _LoginState extends State<Login> {
                                                focusedBorder:  OutlineInputBorder(
                                                  borderSide:  BorderSide(color: MyColors.background_red, width: 1.0),
                                                ),
-                                               labelText: "Email Adress",
-                                               hintText: "XXXX@gmail.com"
+                                               labelText: "Password",
+                                               hintText: "********",
+                                               
 
-                                           )
+                                           ),
+                                           obscureText: true,
+                                           onChanged: (value){
+                                             this.setState((){_password=value;});
+                                             
+                                           },
                                        ),
 
                                      ],
@@ -129,8 +143,12 @@ class _LoginState extends State<Login> {
                                    bottomRight: Radius.circular(30.0))),
                                child:InkWell(
                                  onTap: (){
-                                   print("button presses");
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Services()));
+                                   FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password).then((value){
+                                     
+                                   }).catchError((error){
+                                     debugPrint(error);
+                                   });
+
                                  },
                                  
                                  child: Container(

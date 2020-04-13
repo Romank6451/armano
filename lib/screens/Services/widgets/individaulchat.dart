@@ -1,3 +1,4 @@
+import 'package:armano/screens/Services/Chatscreen.dart';
 import 'package:flutter/material.dart';
 
 class Individual extends StatelessWidget {
@@ -8,6 +9,10 @@ class Individual extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  ListTile(
+                        onTap: (){
+                          print('chat clicked');
+                          Navigator.push(context, MaterialPageRoute(builder: (contex)=>Chatscreen(name)));
+                        },
                           leading: Container(
                             width: 50,
                             height: 50,

@@ -1,5 +1,6 @@
-import 'package:armano/Services/Chatlist.dart';
-import 'package:armano/Services/service.dart';
+
+import 'package:armano/screens/Services/Chatlist.dart';
+import 'package:armano/screens/Services/service.dart';
 import 'package:flutter/material.dart';
 
 
@@ -18,7 +19,7 @@ class _BottombarState extends State<Bottombar> {
                 width: MediaQuery.of(context).size.width,
                 height: 70,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
                   image: DecorationImage(image: AssetImage('assets/images/splash_screen.png'),
                   fit: BoxFit.cover)
                 ),
