@@ -15,11 +15,10 @@ class _ProvideservicesState extends State<Provideservices> {
  TextEditingController description=TextEditingController();
  TextEditingController servicelist=TextEditingController();
 
+var firestore= Firestore.instance;
 
-var firestore;
-
- Future getservices() async {
-   firestore= Firestore.instance;
+Future getservices() async {
+   
 QuerySnapshot qn= await firestore.collection("services").getDocuments();
 return qn.documents;
 
@@ -31,9 +30,6 @@ return qn.documents;
     String serv=list.reduce((value,element)=>value+','+element);
     servicelist.text=serv;
     print("String: $serv");
-    
-    
-
     
  }
  String tt;
@@ -52,7 +48,7 @@ return qn.documents;
     
     super.initState();
    
-getservices();
+
     title.addListener((){
       print(title.text);
     });
@@ -74,24 +70,24 @@ getservices();
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FutureBuilder(
-        future: getservices(),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: firestore.collection('services').snapshots(),
         builder: (_, snapshot){
         if(snapshot.connectionState== ConnectionState.waiting){
           return Center(child: CircularProgressIndicator());
         }else{
           return ListView.builder(
-            itemCount: snapshot.data.length,
+            itemCount: snapshot.data.documents.length,
             itemBuilder: (_,index){
               return Container(
                 decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(color: Colors.black))
                 ),
                 child: ListTile(
-                  title: Text(snapshot.data[index].data['title']),
+                  title: Text(snapshot.data.documents[index].data['title']),
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: (){
-                    chanengevalue(snapshot.data[index]);
+                    chanengevalue(snapshot.data.documents[index]);
                     
                     showDialog(
                       
@@ -191,7 +187,7 @@ getservices();
                                         width: MediaQuery.of(context).size.width,
                                         height: 50,
                                         child: FlatButton(onPressed: (){
-                                          update(snapshot.data[index]);
+                                          update(snapshot.data.documents[index]);
                                           setState(() {
                                             getservices();
                                           });
