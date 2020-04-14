@@ -1,7 +1,10 @@
+import 'package:armano/main.dart';
+import 'package:armano/screens/Services/Chatscreen.dart';
 import 'package:armano/screens/Services/widgets/Bottombar.dart';
-import 'package:armano/screens/Services/widgets/individaulchat.dart';
 import 'package:armano/utills/MyColors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Chatlist extends StatefulWidget {
   @override
@@ -9,6 +12,25 @@ class Chatlist extends StatefulWidget {
 }
 
 class _ChatlistState extends State<Chatlist> {
+
+  Future<DocumentSnapshot> getuser(id) async {
+   return await Firestore.instance.collection("users").document(id).get();
+
+  }
+bool _visiable=false;
+  checkopacity(data){
+    if(data=='0'){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+  Gettime(timestamp){
+
+  return DateFormat("hh:mm a").format(timestamp.toDate());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,11 +62,91 @@ class _ChatlistState extends State<Chatlist> {
                           
                           decoration: BoxDecoration(
                             
-                            border: Border.all(),
+                            // border: Border.all(),
                           ),
 
                           //here write the halpers
-                          child: Individual(),
+                          child: StreamBuilder(
+                            stream: Firestore.instance.collection("conversations").snapshots(),
+                            builder: (cc,snaps){
+                              List<DocumentSnapshot> conversations=snaps.data.documents;
+                              return ListView.builder(
+                                itemCount: conversations.length,
+                                itemBuilder: (c,i){
+                                 return FutureBuilder(
+                                   future: getuser(conversations[i]["from"]),
+                                   builder:(ii,user){
+                                     return Container(
+                                       decoration: BoxDecoration(
+                                     border: Border(bottom: BorderSide(color: Colors.black.withAlpha(20)))
+                                         ),
+                                       child: ListTile(
+                        onTap: (){
+                          
+                          print('chat clicked');
+                          Navigator.push(context, MaterialPageRoute(builder: (contex)=>Chatscreen(user.data["name"])));
+                        },
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              
+                              shape: BoxShape.circle,
+                             image: DecorationImage(image: NetworkImage(user.data["photo"]),fit: BoxFit.fill)
+                            ),
+                            
+                          ),
+                          
+                          title:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                   Text(user.data["name"],style: TextStyle(fontWeight: FontWeight.w600)),
+                                   Padding(padding: EdgeInsets.only(left: 50)),
+
+                                   Padding(
+                                       padding: const EdgeInsets.all(8.0),
+                                       child: Text(Gettime(conversations[i]["time"]),style: TextStyle(fontSize: 10,)),
+                                   )
+                                ],
+                              ),
+                              
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Opacity(
+                                    opacity: 0.8,
+                                    child: Text(conversations[i]["last_content"],style: TextStyle(fontSize: 12))),
+                                  
+                                  Opacity(
+                                    opacity: checkopacity(conversations[i]["unreadmsg"].toString())?1:0.0,
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 20),
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        shape: BoxShape.circle
+                                      ),
+                                      child: Center(child: Text(conversations[i]["unreadmsg"].toString(),style: TextStyle(fontSize: 11,color: Colors.white))),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                         
+                          // trailing: Icon(Icons.arrow_forward_ios),
+                        ),
+                                     );
+                                   },
+                                 );
+                                },
+                              );
+                            },
+                          )
                         
                         ),
                       ),
