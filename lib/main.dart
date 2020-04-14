@@ -7,9 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+  static FirebaseUser user;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    getuser();
+
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -22,6 +27,15 @@ class MyApp extends StatelessWidget {
 
   
 }
+
+Future<void> getuser() async {
+  MyApp.user=await FirebaseAuth.instance.currentUser();
+  print("user"+MyApp.user.uid);
+
+
+}
+
+
 
 Widget _homewidgetdisplay(){
   return StreamBuilder(
