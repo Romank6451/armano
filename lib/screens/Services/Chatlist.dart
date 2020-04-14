@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../chat_screen.dart';
+
 class Chatlist extends StatefulWidget {
   @override
   _ChatlistState createState() => _ChatlistState();
@@ -67,10 +69,15 @@ bool _visiable=false;
 
                           //here write the halpers
                           child: StreamBuilder(
-                            stream: Firestore.instance.collection("conversations").snapshots(),
+                            stream: Firestore.instance.collection("conversations")
+                                .orderBy('time', descending: true)
+                                .snapshots(),
+
                             builder: (cc,snaps){
                               List<DocumentSnapshot> conversations=snaps.data.documents;
+
                               return ListView.builder(
+
                                 itemCount: conversations.length,
                                 itemBuilder: (c,i){
                                  return FutureBuilder(
@@ -83,8 +90,13 @@ bool _visiable=false;
                                        child: ListTile(
                         onTap: (){
                           
-                          print('chat clicked');
-                          Navigator.push(context, MaterialPageRoute(builder: (contex)=>Chatscreen(user.data["name"])));
+                          print('chat clicked'+conversations.toString());
+
+                          Navigator.push(context, MaterialPageRoute(builder: (contex)=>ChatScreen(conversations[i])));
+
+                          Firestore.instance.collection("conversations").document(conversations[i].documentID).updateData({
+                            "unreadmsg":0
+                          });
                         },
                           leading: Container(
                             width: 50,
@@ -118,7 +130,9 @@ bool _visiable=false;
                                 children: <Widget>[
                                   Opacity(
                                     opacity: 0.8,
-                                    child: Text(conversations[i]["last_content"],style: TextStyle(fontSize: 12))),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width/2,
+                                        child: Text(conversations[i]["last_content"],overflow:TextOverflow.ellipsis,style: TextStyle(fontSize: 12)))),
                                   
                                   Opacity(
                                     opacity: checkopacity(conversations[i]["unreadmsg"].toString())?1:0.0,
@@ -144,6 +158,7 @@ bool _visiable=false;
                                    },
                                  );
                                 },
+
                               );
                             },
                           )
