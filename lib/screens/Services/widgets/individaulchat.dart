@@ -1,48 +1,33 @@
+
 import 'package:armano/screens/Services/Chatscreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Individual extends StatelessWidget {
+  var firestore=Firestore.instance;
 
-  String inputimage;
-  String name,location,date,last_msg;
-  Individual(this.inputimage,this.name,this.last_msg,this.location,this.date,);
+ Future<void> getid()async{
+   Future<FirebaseUser> user=FirebaseAuth.instance.currentUser();
+ }
+ 
+  
   @override
   Widget build(BuildContext context) {
-    return  ListTile(
-                        onTap: (){
-                          print('chat clicked');
-                          Navigator.push(context, MaterialPageRoute(builder: (contex)=>Chatscreen(name)));
-                        },
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(200)),
-                             image: DecorationImage(image: AssetImage(inputimage),fit: BoxFit.fill)
-                            ),
-                            
-                          ),
-                          
-                          title:Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                
-                                children: <Widget>[
-                                   Text(name,style: TextStyle(fontWeight: FontWeight.w600)),
-                                   Padding(padding: EdgeInsets.only(left: 50)),
-
-                                   Padding(
-                                     padding: const EdgeInsets.all(8.0),
-                                     child: Text(location,style: TextStyle(fontSize: 8,)),
-                                   )
-                                ],
-                              ),
-                              Text(last_msg,style: TextStyle(fontSize: 12))
-                            ],
-                          ),
-                          subtitle: Text(date,style: TextStyle(fontSize: 8,color:Colors.grey,)),
-                          trailing: Icon(Icons.arrow_forward_ios),
-                        );
+    return  StreamBuilder(
+      stream: firestore.collection('conversations').document().collection('message').snapshots(),
+      builder: (_,snapshot){
+          if(!snapshot.hasData){
+            return Text('loading...');
+          }
+            else{
+              print(snapshot.data.documents.length);
+            return Container(
+              child: Text('data'),
+            );}
+          
+      });
   }
+
+  
 }

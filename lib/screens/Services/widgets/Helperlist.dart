@@ -55,7 +55,11 @@ return qn.documents;
                   trailing: InkWell(
                     onTap: (){
                       print('object');
-                      //firestore.collection('config').document(list[index]).delete();
+                      firestore.collection('config').document("app").updateData({
+                        "helper":FieldValue.arrayRemove(snapshot.data.documents[0].data['helper'][index])
+
+
+                      });
                      // snapshot.data.documents[0].data['helper'][index]="";
 
                     },

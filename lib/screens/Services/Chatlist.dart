@@ -44,32 +44,7 @@ class _ChatlistState extends State<Chatlist> {
                           ),
 
                           //here write the halpers
-                          child: ListView(
-                            children: ListTile.divideTiles(
-                              color: Colors.black,
-                              
-                              context: context,
-                              tiles: [
-                              
-                             Individual('assets/images/splash_screen.png','Umer waqas','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/logo.png','Waqas','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/loging_card_bottom.png','Amandi','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/logo.png','Hanif','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Bannu','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Roman','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Roman','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Roman','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Roman','my name is khan','pakistan','20:20:2020'),
-
-                             Individual('assets/images/splash_screen.png','Roman','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Khan','my name is khan','pakistan','20:20:2020'),
-                             Individual('assets/images/splash_screen.png','Khan','my name is khan','pakistan','20:20:2020'),
-                            
-
-                             SizedBox(height: 190,)
-                              
-                            ],).toList(),
-                          ),
+                          child: Individual(),
                         
                         ),
                       ),
