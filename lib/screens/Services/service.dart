@@ -1,5 +1,6 @@
 
 
+import 'package:armano/screens/Services/Sednoffer.dart';
 import 'package:armano/screens/Services/widgets/Bottombar.dart';
 import 'package:armano/screens/Services/widgets/Helperlist.dart';
 import 'package:armano/screens/Services/widgets/provideservises.dart';
@@ -72,6 +73,15 @@ update(){
                   FirebaseAuth.instance.signOut();
                 },
                 child: Text("Services",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),)),
+                 InkWell(
+                   onTap: (){
+                     showDialog(
+                      
+                      context: context, builder: (BuildContext context){
+                        return  Sendoffer();});
+                    
+                   },
+                   child: Text("sendoffer",style: TextStyle(color:Colors.red,fontSize: 20,fontWeight: FontWeight.w700),)),
               
               Padding(
                 padding: const EdgeInsets.only(left: 15,right: 15),

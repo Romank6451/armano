@@ -83,6 +83,9 @@ bool _visiable=false;
                                  return FutureBuilder(
                                    future: getuser(conversations[i]["from"]),
                                    builder:(ii,user){
+                                     if(!user.hasData){
+                                       return Text('Loading');
+                                     }else{
                                      return Container(
                                        decoration: BoxDecoration(
                                      border: Border(bottom: BorderSide(color: Colors.black.withAlpha(20)))
@@ -154,7 +157,7 @@ bool _visiable=false;
                          
                           // trailing: Icon(Icons.arrow_forward_ios),
                         ),
-                                     );
+                                     );}
                                    },
                                  );
                                 },

@@ -1,7 +1,5 @@
 
 import 'dart:async';
-import 'dart:ffi';
-import 'dart:math';
 
 import 'package:armano/screens/utills/bubble.dart';
 import 'package:armano/utills/MyColors.dart';
@@ -10,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../main.dart';
 
 
 class ChatScreen extends StatefulWidget {
